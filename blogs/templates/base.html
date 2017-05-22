@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %} {% endblock %}Home</title>
+    <!-- Bootstrap -->
+    <link href='{% static "bootstrap/css/bootstrap.min.css" %}' rel="stylesheet">
+    <link href='{% static "default.css" %}' rel="stylesheet">
+
+</head>
+<body>
+<br>
+<br>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'post_list' %}"><span
+                        class="glyphicon glyphicon-chevron-right"></span>WORDPLEASE</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                {#                <li>#}
+                <li><a href="{% url 'blog-list' %}">Blogs</a></li>
+                {% if user %}
+                    <li>
+                        <a href="{% url 'add_post' %}">New Post</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'blog-post-details' username=logged_in_user.username %}">{{ logged_in_user.username }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'register-user' %}">Signup</a>
+                    </li>
+                {% endif %}
+
+                {#                </li>#}
+            </ul>
+        </div>
+    </nav>
+
+    {% if categories %}
+
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                {% block categories %}
+                    <div class="col-lg-2">Categories :</div>
+                    {% for category in categories %}
+                        <div class="col-lg-1 {% if selected_cat == category.slug %}bg-success text-white{% endif %}"><a
+                                href="{% url 'post_list' %}?cat={{ category.slug }}">{{ category.title }}</a></div>
+                    {% endfor %}
+                {% endblock %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src='{% static "bootstrap/js/bootstrap.min.js" %}'></script>
+
+</body>
+</html>

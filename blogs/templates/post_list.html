@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Sort
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="{% url 'post_list' %}?sort=title">Title</a></li>
+            <li><a href="{% url 'post_list' %}?sort=posted_at">Posted Date</a></li>
+        </ul>
+    </div>
+    <br>
+    {% for post in posts %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-9 col-sm-9 col-xs-9">
+                        <div class="row">
+                            <div class="col-md-1 col-sm-1 col-xs-11">
+                                <img style="width: 100%;display: block;" src="{% static "go.gif" %}">
+                            </div>
+                            <div class="col-md-11 col-sm-11 col-xs-11">
+
+                                <span style="color: #2b542c"><b>{{ post.blog.author }}</b></span> in <span
+                                    style="color: #2b542c"><b>{{ post.blog.title }}</b></span><br>
+
+                                <span>{{ post.posted_at }} </span>
+                            </div>
+                        </div>
+                        <br>
+                        <span style="font-size: 18px;"><b>{{ post.title }}</b></span>
+                        <br>
+                        <span>{{ post.summary }}
+                        </span><br>
+                        <br>
+                        <a href="{% url 'post-details' slug=post.slug %}">Read more</a>
+
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <img style="width: 70%;display: block;margin: 0 auto;"
+                                 src=" {% if post.picture %} {{ post.picture.url }} {% else %}{% static "go.gif" %}{% endif %}">
+                        </div>
+
+                        {% if user %}
+                            {% if logged_in_user.is_superuser or logged_in_user == post.blog.author %}
+                                <div class="col-md-9 col-sm-9 col-xs-9"></div>
+                                <div class="col-md-3 col-sm-3 col-xs-3">
+                                    <a href="{% url 'update-post' slug=post.slug %}" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-pencil"></span>Edit
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+
